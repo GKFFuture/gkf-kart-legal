@@ -1,0 +1,48 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sfida — GKF Kart Racing</title>
+<meta property="og:title" content="Ti sfido su GKF Kart Racing!">
+<meta property="og:description" content="Batti il mio tempo: corri contro il mio ghost.">
+<style>
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#14161b;color:#f2f4f8;text-align:center}
+.wrap{max-width:520px;margin:0 auto;padding:36px 20px}
+.k{color:#ff7a1a;font-weight:800;letter-spacing:2px;font-size:14px}
+h1{font-size:34px;margin:10px 0 6px}
+.t{font-size:22px;margin:4px 0}
+.time{font-size:44px;font-weight:800;color:#ffc83c;margin:18px 0}
+a.b{display:block;margin:14px 0;padding:18px;border-radius:14px;font-size:20px;font-weight:800;text-decoration:none}
+.go{background:#ff7a1a;color:#fff}.dl{background:#2a2e37;color:#f2f4f8}
+p.n{color:#9aa3b5;font-size:15px;line-height:1.5}
+</style></head><body><div class="wrap">
+<div class="k">GKF KART RACING</div>
+<h1 id="who">SFIDA!</h1>
+<div class="t" id="track"></div>
+<div class="time" id="time"></div>
+<a class="b go" id="open" href="#">APRI LA SFIDA NEL GIOCO</a>
+<a class="b dl" id="store" href="https://play.google.com/store/apps/details?id=com.globalkartingfuture.gkfkartracing">SCARICA IL GIOCO (Google Play)</a>
+<p class="n" id="note">Se il gioco non ce l'hai ancora: scaricalo, aprilo una volta, poi torna qui e tocca di nuovo APRI LA SFIDA.</p>
+</div>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var t = q.get('t') || '', p = q.get('p') || '', ms = parseInt(q.get('ms') || '0', 10) || 0;
+  var n = (q.get('n') || '').toUpperCase().replace(/[^A-Z0-9 _-]/g, '').slice(0, 16);
+  var tn = (q.get('tn') || '').slice(0, 40);
+  var en = !(navigator.language || 'it').toLowerCase().startsWith('it');
+  function fmt(v){ if(!v) return ''; var m=Math.floor(v/60000), s=Math.floor(v/1000)%60, c=v%1000; return m+':'+(s<10?'0':'')+s+'.'+('00'+c).slice(-3); }
+  document.getElementById('who').textContent = n ? (en ? n + ' CHALLENGES YOU' : n + ' TI SFIDA') : (en ? 'CHALLENGE!' : 'SFIDA!');
+  document.getElementById('track').textContent = tn ? (en ? 'on ' : 'su ') + tn : '';
+  document.getElementById('time').textContent = ms ? (en ? 'Time to beat ' : 'Tempo da battere ') + fmt(ms) : '';
+  if (en) {
+    document.getElementById('open').textContent = 'OPEN THE CHALLENGE IN THE GAME';
+    document.getElementById('store').textContent = 'GET THE GAME (Google Play)';
+    document.getElementById('note').textContent = "Don't have the game yet? Install it, open it once, then come back here and tap OPEN THE CHALLENGE again.";
+  }
+  var store = 'https://play.google.com/store/apps/details?id=com.globalkartingfuture.gkfkartracing';
+  var qs = 't=' + encodeURIComponent(t) + '&p=' + encodeURIComponent(p) + '&ms=' + ms + '&n=' + encodeURIComponent(n);
+  var intent = 'intent://sfida?' + qs + '#Intent;scheme=gkfkart;package=com.globalkartingfuture.gkfkartracing;S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
+  var a = document.getElementById('open');
+  if (/android/i.test(navigator.userAgent)) a.href = intent; else a.href = store;
+  if (!t || !p) a.style.display = 'none';
+})();
+</script>
+</body></html>
