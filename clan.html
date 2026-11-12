@@ -58,7 +58,16 @@ p.n{color:#9aa3b5;font-size:14px;line-height:1.5}
   $('code').textContent = raw.slice(0, 4) + '-' + raw.slice(4);
   var store = 'https://play.google.com/store/apps/details?id=com.globalkartingfuture.gkfkartracing';
   var intent = 'intent://clan?c=' + raw + '#Intent;scheme=gkfkart;package=com.globalkartingfuture.gkfkartracing;S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
-  $('open').href = /android/i.test(navigator.userAgent) ? intent : store;
+  // 12/11/2026 (c219): iPhone. APPSTORE = numero dell'app in App Store Connect (vuoto finche' l'app iOS non c'e').
+  var APPSTORE = '';
+  var ua = navigator.userAgent, isAndroid = /android/i.test(ua);
+  var isIos = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var st = document.getElementById('store');
+  if (isIos) {
+    if (APPSTORE) { st.href = 'https://apps.apple.com/app/id' + APPSTORE; st.textContent = en ? 'GET THE GAME (App Store)' : 'SCARICA IL GIOCO (App Store)'; }
+    else { st.removeAttribute('href'); st.textContent = en ? 'COMING SOON ON IPHONE' : 'PRESTO SU IPHONE'; }
+  }
+  $('open').href = isAndroid ? intent : isIos ? 'gkfkart://clan?c=' + raw : store;
   $('copy').addEventListener('click', function(){
     var done = function(){ $('copy').textContent = en ? 'COPIED' : 'COPIATO'; };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(raw).then(done, function(){});
