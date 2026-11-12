@@ -41,7 +41,17 @@ p.n{color:#9aa3b5;font-size:15px;line-height:1.5}
   var qs = 't=' + encodeURIComponent(t) + '&p=' + encodeURIComponent(p) + '&ms=' + ms + '&n=' + encodeURIComponent(n);
   var intent = 'intent://sfida?' + qs + '#Intent;scheme=gkfkart;package=com.globalkartingfuture.gkfkartracing;S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
   var a = document.getElementById('open');
-  if (/android/i.test(navigator.userAgent)) a.href = intent; else a.href = store;
+  // 12/11/2026 (c219): iPhone. APPSTORE = numero dell'app in App Store Connect (vuoto finche' l'app iOS non c'e').
+  var APPSTORE = '';
+  var ua = navigator.userAgent, isAndroid = /android/i.test(ua);
+  var isIos = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var st = document.getElementById('store');
+  if (isIos) {
+    if (APPSTORE) { st.href = 'https://apps.apple.com/app/id' + APPSTORE; st.textContent = en ? 'GET THE GAME (App Store)' : 'SCARICA IL GIOCO (App Store)'; }
+    else { st.removeAttribute('href'); st.textContent = en ? 'COMING SOON ON IPHONE' : 'PRESTO SU IPHONE'; }
+  }
+  // Android: intent (Chrome apre il gioco, altrimenti il Play Store); iPhone: gkfkart:// (apre il gioco se c'e')
+  if (isAndroid) a.href = intent; else if (isIos) a.href = 'gkfkart://sfida?' + qs; else a.href = store;
   if (!t || !p) a.style.display = 'none';
 })();
 </script>

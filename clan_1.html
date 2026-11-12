@@ -1,0 +1,77 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invito clan — GKF Kart Racing</title>
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Entra nel mio clan su GKF Kart Racing!">
+<meta property="og:description" content="Corri con la nostra squadra: tocca il link e usa il codice invito.">
+<style>
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#14161b;color:#f2f4f8;text-align:center}
+.wrap{max-width:520px;margin:0 auto;padding:36px 20px}
+.k{color:#ff7a1a;font-weight:800;letter-spacing:2px;font-size:14px}
+h1{font-size:32px;margin:10px 0 6px}
+.code{font-size:44px;font-weight:800;color:#ffc83c;letter-spacing:4px;margin:18px 0 6px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.lab{color:#9aa3b5;font-size:15px}
+a.b,button.b{display:block;width:100%;box-sizing:border-box;margin:14px 0;padding:18px;border:0;border-radius:14px;font-size:20px;font-weight:800;text-decoration:none;cursor:pointer;font-family:inherit}
+.go{background:#ff7a1a;color:#fff}.dl{background:#2a2e37;color:#f2f4f8}.cp{background:#1f232b;color:#ffc83c}
+ol{text-align:left;color:#c9d0dc;font-size:16px;line-height:1.6;padding-left:22px}
+p.n{color:#9aa3b5;font-size:14px;line-height:1.5}
+.bad{color:#ff8a7a;font-size:18px;margin:24px 0}
+</style></head><body><div class="wrap">
+<div class="k">GKF KART RACING</div>
+<h1 id="title">INVITO NEL CLAN</h1>
+<div id="ok">
+  <div class="lab" id="lab">Codice invito</div>
+  <div class="code" id="code"></div>
+  <a class="b go" id="open" href="#">APRI L'INVITO NEL GIOCO</a>
+  <button class="b cp" id="copy" type="button">COPIA IL CODICE</button>
+  <a class="b dl" id="store" href="https://play.google.com/store/apps/details?id=com.globalkartingfuture.gkfkartracing">SCARICA IL GIOCO (Google Play)</a>
+  <ol id="steps">
+    <li>Se il gioco non ce l'hai: scaricalo e fai la prima gara (si parte subito, senza registrazione).</li>
+    <li>Poi tocca di nuovo <b>APRI L'INVITO NEL GIOCO</b>, oppure nel gioco vai su <b>CLAN &gt; HO UN CODICE</b> e scrivi il codice.</li>
+    <li>Il gioco ti mostra il clan: tocca <b>ENTRA NEL CLAN</b> per confermare.</li>
+  </ol>
+  <p class="n" id="note">Il codice vale 7 giorni. Il clan e il suo nome li controlla il gioco: questa pagina mostra solo il codice.</p>
+</div>
+<div class="bad" id="bad" style="display:none">Questo link non contiene un codice invito valido. Chiedi un nuovo invito a chi ti ha mandato il link.</div>
+</div>
+<script>
+(function(){
+  // 08/11/2026 (c193a). Nessun dato personale, nessun cookie, nessuno script esterno. Il codice si mostra solo come testo.
+  var ALPHA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';           // uguale a GKF.Competitive.ClanRules.InviteAlphabet
+  var raw = (new URLSearchParams(location.search).get('c') || '').toUpperCase().replace(/[\s-]/g, '');
+  var valid = raw.length === 8 && raw.split('').every(function(ch){ return ALPHA.indexOf(ch) >= 0; });
+  var en = !(navigator.language || 'it').toLowerCase().startsWith('it');
+  var $ = function(id){ return document.getElementById(id); };
+  if (en) {
+    $('title').textContent = 'CLAN INVITE';
+    $('lab').textContent = 'Invite code';
+    $('open').textContent = 'OPEN THE INVITE IN THE GAME';
+    $('copy').textContent = 'COPY THE CODE';
+    $('store').textContent = 'GET THE GAME (Google Play)';
+    $('steps').innerHTML = '';
+    ['If you don\'t have the game: install it and do the first race (it starts right away, no sign-up).',
+     'Then tap OPEN THE INVITE IN THE GAME again, or in the game go to CLAN > I HAVE A CODE and type the code.',
+     'The game shows you the clan: tap JOIN THE CLAN to confirm.'].forEach(function(t){ var li = document.createElement('li'); li.textContent = t; $('steps').appendChild(li); });
+    $('note').textContent = 'The code is valid for 7 days. The game checks the clan and its name: this page only shows the code.';
+    $('bad').textContent = 'This link does not contain a valid invite code. Ask the person who sent it for a new invite.';
+  }
+  if (!valid) { $('ok').style.display = 'none'; $('bad').style.display = 'block'; return; }
+  $('code').textContent = raw.slice(0, 4) + '-' + raw.slice(4);
+  var store = 'https://play.google.com/store/apps/details?id=com.globalkartingfuture.gkfkartracing';
+  var intent = 'intent://clan?c=' + raw + '#Intent;scheme=gkfkart;package=com.globalkartingfuture.gkfkartracing;S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
+  // 12/11/2026 (c219): iPhone. APPSTORE = numero dell'app in App Store Connect (vuoto finche' l'app iOS non c'e').
+  var APPSTORE = '';
+  var ua = navigator.userAgent, isAndroid = /android/i.test(ua);
+  var isIos = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var st = document.getElementById('store');
+  if (isIos) {
+    if (APPSTORE) { st.href = 'https://apps.apple.com/app/id' + APPSTORE; st.textContent = en ? 'GET THE GAME (App Store)' : 'SCARICA IL GIOCO (App Store)'; }
+    else { st.removeAttribute('href'); st.textContent = en ? 'COMING SOON ON IPHONE' : 'PRESTO SU IPHONE'; }
+  }
+  $('open').href = isAndroid ? intent : isIos ? 'gkfkart://clan?c=' + raw : store;
+  $('copy').addEventListener('click', function(){
+    var done = function(){ $('copy').textContent = en ? 'COPIED' : 'COPIATO'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(raw).then(done, function(){});
+  });
+})();
+</script>
+</body></html>
